@@ -1,0 +1,51 @@
+services:
+  db:
+    image: postgres:latest
+    container_name: dev-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: appuser
+      POSTGRES_PASSWORD: appsecret
+      POSTGRES_DB: appdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - appnet
+
+  wildfly:
+    image: quay.io/wildfly/wildfly:latest
+    container_name: wildfly
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      # Management User für das WildFly Management Interface (Port 9990)
+      WILDFLY_MANAGEMENT_USER: admin
+      WILDFLY_MANAGEMENT_PASSWORD: admin123!
+
+      # Optional: JDBC-URL als Umgebungsvariable, die deine App verwenden kann
+      DB_URL: jdbc:postgresql://db:5432/appdb
+      DB_USER: appuser
+      DB_PASSWORD: appsecret
+    ports:
+      - "8080:8080"   # HTTP (App)
+      - "9990:9990"   # Management
+    volumes:
+      # Hier kannst du deine Deployments ablegen
+      - ./deployments:/opt/jboss/wildfly/standalone/deployments
+      - ./wildfly-init.sh:/opt/jboss/wildfly-init.sh
+
+      # Optional: Konfiguration (falls du eigene standalone.xml etc. hast)
+      # - ./config/standalone.xml:/opt/jboss/wildfly/standalone/configuration/standalone.xml
+    command: ["/bin/bash", "/opt/jboss/wildfly-init.sh"]
+    networks:
+      - appnet
+
+volumes:
+  pgdata:
+
+networks:
+  appnet:
+    driver: bridge
