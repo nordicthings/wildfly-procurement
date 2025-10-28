@@ -274,10 +274,10 @@
                         <include>**/*IT.java</include>
                     </includes>
                     <environmentVariables>
-                        <POSTGRESQL_DATABASE>testdb</POSTGRESQL_DATABASE>
+                        <POSTGRESQL_DATABASE>appdb</POSTGRESQL_DATABASE>
                         <POSTGRESQL_JNDI>java:/jdbc/AppDS</POSTGRESQL_JNDI>
-                        <POSTGRESQL_USER>testuser</POSTGRESQL_USER>
-                        <POSTGRESQL_PASSWORD>testpass</POSTGRESQL_PASSWORD>
+                        <POSTGRESQL_USER>appuser</POSTGRESQL_USER>
+                        <POSTGRESQL_PASSWORD>appsecret</POSTGRESQL_PASSWORD>
                     </environmentVariables>
 
                 </configuration>
