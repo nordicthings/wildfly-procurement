@@ -1,0 +1,16 @@
+# PostgreSQL-Treiber registrieren
+/subsystem=datasources/jdbc-driver=postgresql:add(driver-name=postgresql, driver-module-name=org.postgresql, driver-class-name=org.postgresql.Driver)
+
+# DataSource hinzufügen
+data-source add \
+  --name=AppDS \
+  --jndi-name=java:/jdbc/AppDS \
+  --driver-name=postgresql \
+  --connection-url=${env.DB_URL} \
+  --user-name=${env.DB_USER} \
+  --password=${env.DB_PASSWORD} \
+  --use-ccm=false \
+  --enabled=true
+
+# Änderungen speichern
+:reload

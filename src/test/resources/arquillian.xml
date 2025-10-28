@@ -5,7 +5,26 @@
 
     <container default="true" qualifier="managed">
         <configuration>
+            <!-- Pfad zur Wildfly-Installation. TODO: durch relativen Pfad mit Maven-Resource-Filtering ersetzen -->
             <property name="jbossHome">target/server</property>
+            <property name="managementPort">9990</property>
+            <property name="managementAddress">localhost</property>
+            <!-- cleanServer=true stellt sicher, dass Arquillian für jeden Testdurchlauf
+                 eine saubere Wildfly-Instanz startet und nach dem Test wieder entfernt.
+                 Dies ist ideal für Integrationstests, da es Testisolierung gewährleistet. -->
+<!--            <property name="cleanServer">true</property>-->
+            <!-- Die javaVmArguments sollten hier nicht den jboss.http.port setzen,
+                 da der Wildfly Managed Container dies selbst verwaltet.
+                 Die Port-Offsets oder spezifische Startbefehle können hier definiert werden,
+                 aber für einen Standard-Test ist das meist nicht nötig. -->
+<!--            <property name="javaVmArguments">-->
+<!--                -Djava.util.logging.manager=org.jboss.logmanager.LogManager-->
+<!--                -Xmx512m-->
+<!--            </property>-->
+            <!-- Wenn jbossHome leer ist, versucht Arquillian den Server herunterzuladen und zu entpacken.
+                 Für dieses Beispiel gehen wir davon aus, dass ein lokaler Wildfly vorhanden ist. -->
+            <!-- <property name="version">37.0.0.Final</property> -->
+            <!-- <property name="downloadDirectory">${project.build.directory}/wildfly-downloads</property> -->
         </configuration>
     </container>
 </arquillian>

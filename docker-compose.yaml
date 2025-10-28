@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres:latest
+    image: postgres:17.6
     container_name: dev-postgres
     restart: unless-stopped
     environment:
@@ -15,7 +15,7 @@ services:
       - appnet
 
   wildfly:
-    image: quay.io/wildfly/wildfly:latest
+    image: quay.io/wildfly/wildfly:37.0.1.Final-jdk21
     container_name: wildfly
     restart: unless-stopped
     depends_on:
@@ -34,8 +34,10 @@ services:
       - "9990:9990"   # Management
     volumes:
       # Hier kannst du deine Deployments ablegen
-      - ./deployments:/opt/jboss/wildfly/standalone/deployments
-      - ./wildfly-init.sh:/opt/jboss/wildfly-init.sh
+      - ./docker/deployments:/opt/jboss/wildfly/standalone/deployments
+      - ./docker/wildfly-init.sh:/opt/jboss/wildfly-init.sh
+      - ./docker/configure-datasource.cli:/opt/jboss/wildfly/configure-datasource.cli
+      - ./docker/modules/org/postgresql/main:/opt/jboss/wildfly/modules/system/layers/base/org/postgresql/main
 
       # Optional: Konfiguration (falls du eigene standalone.xml etc. hast)
       # - ./config/standalone.xml:/opt/jboss/wildfly/standalone/configuration/standalone.xml
