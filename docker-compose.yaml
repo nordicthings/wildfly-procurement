@@ -15,17 +15,18 @@ services:
       - appnet
 
   wildfly:
+    # Wir ziehen das MultiArch-Image von quai.io (im docker-hub gibt es das nicht)
     image: quay.io/wildfly/wildfly:37.0.1.Final-jdk21
     container_name: wildfly
     restart: unless-stopped
     depends_on:
       - db
     environment:
-      # Management User für das WildFly Management Interface (Port 9990)
+      # Management User für das lokale WildFly Management Interface (Port 9990)
       WILDFLY_MANAGEMENT_USER: admin
       WILDFLY_MANAGEMENT_PASSWORD: admin123!
 
-      # Optional: JDBC-URL als Umgebungsvariable, die deine App verwenden kann
+      # DB Connection für die lokale Postgres
       DB_URL: jdbc:postgresql://db:5432/procurementdb
       DB_USER: devuser
       DB_PASSWORD: devsecret
@@ -33,14 +34,11 @@ services:
       - "8080:8080"   # App
       - "9990:9990"   # Management
     volumes:
-      # Hier kannst du deine Deployments ablegen
       - ./docker/deployments:/opt/jboss/wildfly/standalone/deployments
       - ./docker/wildfly-init.sh:/opt/jboss/wildfly-init.sh
       - ./docker/configure-datasource.cli:/opt/jboss/wildfly/configure-datasource.cli
       - ./docker/modules/org/postgresql/main:/opt/jboss/wildfly/modules/system/layers/base/org/postgresql/main
 
-      # Optional: Konfiguration (falls du eigene standalone.xml etc. hast)
-      # - ./config/standalone.xml:/opt/jboss/wildfly/standalone/configuration/standalone.xml
     command: ["/bin/bash", "/opt/jboss/wildfly-init.sh"]
     networks:
       - appnet
