@@ -4,18 +4,27 @@
              xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
              version="3.0">
 
-    <!-- Eine Persistence Unit definiert eine logische Gruppe von Entitäten und eine Datenquelle -->
-    <persistence-unit name="appPU" transaction-type="JTA">
-        <!-- Die DataSource, die in WildFly registriert ist -->
+    <!-- Definiert eine logische Gruppe von Entitäten und eine Datenquelle -->
+    <persistence-unit name="procurement-pu" transaction-type="JTA">
         <!-- JTA (Java Transaction API) wird verwendet, da der Application Server die Transaktionen verwaltet -->
         <!-- Der JNDI-Name der im Wildfly-Server konfigurierten DataSource -->
         <jta-data-source>java:/jdbc/AppDS</jta-data-source>
+
+        <class>de.holisticon.wildfly.procurement.entity.ApiCall</class>
 
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
             <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
+
+            <!-- JPA 2.2 Schema Generation -->
+            <property name="jakarta.persistence.schema-generation.database.action" value="none"/>
+
+            <!-- Logging -->
+            <property name="hibernate.use_sql_comments" value="true"/>
+            <property name="hibernate.type.descriptor.sql.BasicBinder" value="TRACE"/>
+
         </properties>
     </persistence-unit>
 

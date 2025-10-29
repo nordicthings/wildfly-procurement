@@ -125,6 +125,24 @@
             <scope>provided</scope>
         </dependency>
 
+        <dependency>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.ejb</groupId>
+            <artifactId>jakarta.ejb-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.transaction</groupId>
+            <artifactId>jakarta.transaction-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
         <!-- Import the JAX-RS API, we use provided scope as the API is included in WildFly -->
         <dependency>
             <groupId>jakarta.ws.rs</groupId>
@@ -177,13 +195,12 @@
             <scope>provided</scope>
         </dependency>
 
-     </dependencies>
+    </dependencies>
 
     <build>
-<!--        <finalName>${project.artifactId}</finalName>-->
+        <!--        <finalName>${project.artifactId}</finalName>-->
         <finalName>ROOT</finalName>
         <plugins>
-            <!-- Maven Compiler Plugin für Java 21 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -194,19 +211,18 @@
                 </configuration>
             </plugin>
 
-            <!-- Maven WAR Plugin zum Erstellen der WAR-Datei -->
+            <!-- Steuert die Erstellung der WAR-Datei -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>${maven-war-plugin.version}</version>
                 <configuration>
-                    <warName>ROOT</warName>
                     <!-- Jakarta EE benötigt keine web.xml, nur beans.xml -->
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin>
 
-            <!-- Wildfly Maven Plugin zum Deployment auf Wildfly -->
+            <!-- Steuert das Deployment auf Wildfly -->
             <plugin>
                 <groupId>org.wildfly.plugins</groupId>
                 <artifactId>wildfly-maven-plugin</artifactId>
@@ -214,31 +230,30 @@
                 <configuration>
                     <discover-provisioning-info>
                         <version>${wildfly.version}</version>
+
+                        <!-- Klassisches Deployment -->
                         <context>bare-metal</context>
                         <add-ons>
                             <add-on>postgresql</add-on>
                         </add-ons>
                     </discover-provisioning-info>
 
+                    <!-- Registrieren der AppDS-Datasource -->
                     <commands>
-                        <command>/subsystem=datasources/data-source=AppDS:add(jndi-name=java:/jdbc/AppDS, driver-name=postgresql, connection-url=jdbc:postgresql://localhost:5432/appdb, user-name=appuser, password=appsecret)</command>
+                        <command>/subsystem=datasources/data-source=AppDS:add(jndi-name=java:/jdbc/AppDS,
+                            driver-name=postgresql, connection-url=jdbc:postgresql://localhost:5432/appdb,
+                            user-name=appuser, password=appsecret)
+                        </command>
                     </commands>
 
-                    <!-- Server-Verbindungsdetails -->
+                    <!-- Lokale Server-Verbindungsdetails -->
                     <hostname>localhost</hostname>
                     <port>9990</port>
                     <protocol>remote+http</protocol>
-
-                    <!-- Credentials -->
                     <username>admin</username>
                     <password>admin123!</password>
 
-                    <!-- Deployment-Konfiguration -->
-<!--                    <filename>${project.build.finalName}.war</filename>-->
-<!--                    <name>${project.build.finalName}.war</name>-->
-<!--                    <filename>ROOT.war</filename>-->
-<!--                    <name>ROOT.war</name>-->
-<!--                    <runtime-name>ROOT.war</runtime-name>-->
+                    <!-- Überschreibe ein ggf. bereits vorhandenes Deployment -->
                     <force>true</force>
 
                 </configuration>
@@ -251,7 +266,7 @@
                 </executions>
             </plugin>
 
-            <!-- Maven Surefire Plugin für Unit-Tests -->
+            <!-- Konfiguration der Unit-Tests -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -263,16 +278,17 @@
                 </configuration>
             </plugin>
 
-            <!-- Maven Failsafe Plugin für Integrationstests -->
+            <!-- Konfiguration der Integrationstests -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>${maven-failsafe-plugin.version}</version>
                 <configuration>
-                    <!-- Bezieht nur Integrationstests (IT-Klassen) ein -->
                     <includes>
                         <include>**/*IT.java</include>
                     </includes>
+                    <!-- Die Umgebungsvariablen werden beim Starten des Wildfly-Servers für die Konfiguration der
+                         Datasource benötigt -->
                     <environmentVariables>
                         <POSTGRESQL_DATABASE>appdb</POSTGRESQL_DATABASE>
                         <POSTGRESQL_JNDI>java:/jdbc/AppDS</POSTGRESQL_JNDI>
