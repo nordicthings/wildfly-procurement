@@ -3,8 +3,8 @@
 
 # DataSource hinzufügen
 data-source add \
-  --name=AppDS \
-  --jndi-name=java:/jdbc/AppDS \
+  --name=procurementDS \
+  --jndi-name=java:/jdbc/procurementDS \
   --driver-name=postgresql \
   --connection-url=${env.DB_URL} \
   --user-name=${env.DB_USER} \

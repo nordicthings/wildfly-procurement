@@ -31,6 +31,7 @@
         <maven-war-plugin.version>3.4.0</maven-war-plugin.version>
 
         <!-- Test-Frameworks -->
+        <!--Explizit: JUnit5 (das WildFly BOM zieht noch per default JUnit4) -->
         <junit.version>5.13.4</junit.version>
 
     </properties>
@@ -94,10 +95,7 @@
 
     <dependencyManagement>
         <dependencies>
-            <!-- JBoss distributes a complete set of Jakarta EE APIs including
-                a Bill of Materials (BOM). We use this here so that we always get the correct
-                versions of artifacts (you can read this as the WildFly stack of the Jakarta EE APIs,
-                with some extra tools for your project, such as Arquillian for testing) -->
+            <!-- Wildfly & Entwicklungstools (z.B. Arquillian) -->
             <dependency>
                 <groupId>org.wildfly.bom</groupId>
                 <artifactId>wildfly-ee-with-tools</artifactId>
@@ -106,7 +104,6 @@
                 <scope>import</scope>
             </dependency>
 
-            <!--Define the JUnit5 bom. WildFly BOM still contains JUnit4, so we have to declare a version here -->
             <dependency>
                 <groupId>org.junit</groupId>
                 <artifactId>junit-bom</artifactId>
@@ -118,7 +115,6 @@
     </dependencyManagement>
 
     <dependencies>
-        <!-- Import the CDI API, we use provided scope as the API is included in WildFly -->
         <dependency>
             <groupId>jakarta.enterprise</groupId>
             <artifactId>jakarta.enterprise.cdi-api</artifactId>
@@ -143,7 +139,6 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Import the JAX-RS API, we use provided scope as the API is included in WildFly -->
         <dependency>
             <groupId>jakarta.ws.rs</groupId>
             <artifactId>jakarta.ws.rs-api</artifactId>
@@ -185,9 +180,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- PostgreSQL JDBC Treiber - Wird nun im Deployment des Arquillian-Tests hinzugefügt -->
-        <!-- Für die Kompilierung ist 'provided' noch okay, da der Server ihn zur Laufzeit bereitstellt
-             oder er im Test-WAR gepackt wird. -->
+        <!-- Wird von Wildfly bereitgestellt -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -238,11 +231,11 @@
                         </add-ons>
                     </discover-provisioning-info>
 
-                    <!-- Registrieren der AppDS-Datasource -->
+                    <!-- Registrieren der procurementDS-Datasource -->
                     <commands>
-                        <command>/subsystem=datasources/data-source=AppDS:add(jndi-name=java:/jdbc/AppDS,
-                            driver-name=postgresql, connection-url=jdbc:postgresql://localhost:5432/appdb,
-                            user-name=appuser, password=appsecret)
+                        <command>/subsystem=datasources/data-source=procurementDS:add(jndi-name=java:/jdbc/procurementDS,
+                            driver-name=postgresql, connection-url=jdbc:postgresql://localhost:5432/procurementdb,
+                            user-name=devuser, password=devsecret)
                         </command>
                     </commands>
 
@@ -290,10 +283,10 @@
                     <!-- Die Umgebungsvariablen werden beim Starten des Wildfly-Servers für die Konfiguration der
                          Datasource benötigt -->
                     <environmentVariables>
-                        <POSTGRESQL_DATABASE>appdb</POSTGRESQL_DATABASE>
-                        <POSTGRESQL_JNDI>java:/jdbc/AppDS</POSTGRESQL_JNDI>
-                        <POSTGRESQL_USER>appuser</POSTGRESQL_USER>
-                        <POSTGRESQL_PASSWORD>appsecret</POSTGRESQL_PASSWORD>
+                        <POSTGRESQL_DATABASE>procurementdb</POSTGRESQL_DATABASE>
+                        <POSTGRESQL_JNDI>java:/jdbc/procurementDS</POSTGRESQL_JNDI>
+                        <POSTGRESQL_USER>devuser</POSTGRESQL_USER>
+                        <POSTGRESQL_PASSWORD>devsecret</POSTGRESQL_PASSWORD>
                     </environmentVariables>
 
                 </configuration>

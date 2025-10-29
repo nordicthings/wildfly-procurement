@@ -13,7 +13,7 @@ public class ApiCallService {
 
   private static final Logger LOGGER = Logger.getLogger(ApiCallService.class.getName());
 
-  @PersistenceContext(unitName = "procurement-pu")
+  @PersistenceContext(unitName = "procurementPU")
   private EntityManager entityManager;
 
   /**
