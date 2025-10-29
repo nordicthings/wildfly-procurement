@@ -4,9 +4,9 @@ services:
     container_name: dev-postgres
     restart: unless-stopped
     environment:
-      POSTGRES_USER: appuser
-      POSTGRES_PASSWORD: appsecret
-      POSTGRES_DB: appdb
+      POSTGRES_USER: devuser
+      POSTGRES_PASSWORD: devsecret
+      POSTGRES_DB: procurementdb
     ports:
       - "5432:5432"
     volumes:
@@ -26,11 +26,11 @@ services:
       WILDFLY_MANAGEMENT_PASSWORD: admin123!
 
       # Optional: JDBC-URL als Umgebungsvariable, die deine App verwenden kann
-      DB_URL: jdbc:postgresql://db:5432/appdb
-      DB_USER: appuser
-      DB_PASSWORD: appsecret
+      DB_URL: jdbc:postgresql://db:5432/procurementdb
+      DB_USER: devuser
+      DB_PASSWORD: devsecret
     ports:
-      - "8080:8080"   # HTTP (App)
+      - "8080:8080"   # App
       - "9990:9990"   # Management
     volumes:
       # Hier kannst du deine Deployments ablegen
