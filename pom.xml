@@ -191,8 +191,7 @@
     </dependencies>
 
     <build>
-        <!--        <finalName>${project.artifactId}</finalName>-->
-        <finalName>ROOT</finalName>
+        <finalName>${project.artifactId}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -233,9 +232,8 @@
 
                     <!-- Registrieren der procurementDS-Datasource -->
                     <commands>
-                        <command>/subsystem=datasources/data-source=procurementDS:add(jndi-name=java:/jdbc/procurementDS,
-                            driver-name=postgresql, connection-url=jdbc:postgresql://localhost:5432/procurementdb,
-                            user-name=devuser, password=devsecret)
+                        <command>
+                            /subsystem=datasources/data-source=procurementDS:add(jndi-name=java:/jdbc/procurementDS,driver-name=postgresql, connection-url=jdbc:postgresql://localhost:5432/procurementdb,user-name=devuser, password=devsecret)
                         </command>
                     </commands>
 
@@ -256,6 +254,7 @@
                             <goal>package</goal>
                         </goals>
                     </execution>
+
                 </executions>
             </plugin>
 

@@ -23,7 +23,7 @@ public class GettingStartedApplicationIT {
     public void testHelloEndpoint() {
         try (Client client = ClientBuilder.newClient()) {
             Response response = client
-                    .target(URI.create("http://localhost:8080/"))
+                    .target(URI.create("http://127.0.0.1:8080/procurement"))
                     .path("/hello/World")
                     .request()
                     .get();

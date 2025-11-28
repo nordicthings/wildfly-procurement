@@ -14,7 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
  * Run integration tests with Arquillian to be able to test CDI beans
  */
 @ExtendWith(ArquillianExtension.class)
-public class   GettingStartedServiceIT {
+public class GettingStartedServiceIT {
 
     @Deployment
     public static WebArchive createTestArchive() {

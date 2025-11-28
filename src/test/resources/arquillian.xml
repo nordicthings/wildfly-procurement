@@ -3,7 +3,7 @@
             xsi:schemaLocation="http://jboss.org/schema/arquillian
                                 https://jboss.org/schema/arquillian/arquillian_1_0.xsd">
 
-    <container default="true" qualifier="managed">
+    <container default="true" qualifier="wildfly-managed">
         <configuration>
             <property name="jbossHome">target/server</property>
             <property name="managementPort">9990</property>
