@@ -1,14 +1,13 @@
 
-= procurement
+= Procurement
 
-The `procurement` project is a simple Jakarta EE application with a HTTP endpoint that is running in
-https://wildfly.org[WildFly].
+The `Procurement` project is a simple Jakarta EE application with an HTTP endpoint that is running in https://wildfly.org[WildFly].
 
-The `src/main` folder contains a simple 'Hello world' style Jakarta EE application using JAX-RS.
+The `src/main` folder contains a simple 'Hello world' style Jakarta EE application using JAX-RS and connects to a PostgresSQL database.
 
 == Building the application
 
-To run the application, you use Maven:
+To build the application, you use Maven:
 
 [source,shell]
 ----
@@ -44,17 +43,20 @@ You could also configure the WildFly provisioning yourself:
 </configuration>
 ----
 
+To run the integration test, you have to provide a running PostgreSQL instance, for now. The next step will be to provide an appropriate Testcontainers-configuration.
 == Running the application
 
-To run the application, run the commands:
-
-[source,shell]
+To run the application, start a wildfly-server with PostgreSQL by starting the appropriate docker containers:
 ----
-cd target/server
-./bin/standalone.sh
+docker compose up -d
 ----
 
-Once WildFly is running, the application can be accessed at http://localhost:8080/
+Next, deploy the application with maven:
+----
+mvn wildfly:deploy
+----
+
+After that, the application can be accessed at http://127.0.0.1:8080/
 
 == Testing the application
 
