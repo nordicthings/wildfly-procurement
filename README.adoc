@@ -44,6 +44,7 @@ You could also configure the WildFly provisioning yourself:
 ----
 
 To run the integration test, you have to provide a running PostgreSQL instance, for now. The next step will be to provide an appropriate Testcontainers-configuration.
+
 == Running the application
 
 To run the application, start a wildfly-server with PostgreSQL by starting the appropriate docker containers:
